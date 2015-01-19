@@ -1,3 +1,0 @@
-= redmine_datetime_custom_field
-
-Description goes here

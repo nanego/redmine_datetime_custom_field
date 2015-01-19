@@ -1,8 +1,19 @@
+require 'redmine'
+
 Redmine::Plugin.register :redmine_datetime_custom_field do
   name 'Redmine Datetime Custom Field plugin'
-  author 'Author name'
-  description 'This is a plugin for Redmine'
-  version '0.0.1'
-  url 'http://example.com/path/to/plugin'
-  author_url 'http://example.com/about'
+  author 'Vincent ROBERT'
+  description 'This is a plugin for Redmine. It adds time to date custom field'
+  version '0.1'
+  url 'https://github.com/nanego/redmine_datetime_custom_field'
+  author_url 'mailto:contact@vincent-robert.com'
+  requires_redmine :version_or_higher => '2.6.0'
+  requires_redmine_plugin :redmine_base_deface, :version_or_higher => '0.0.1'
+end
+
+# Custom patches
+require_dependency 'redmine_datetime_custom_field/hooks'
+Rails.application.config.to_prepare do
+  require_dependency 'redmine_scn/application_helper_patch'
+  require_dependency 'redmine_datetime_custom_field/field_format_patch'
 end
