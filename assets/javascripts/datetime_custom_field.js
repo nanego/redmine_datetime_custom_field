@@ -8,7 +8,7 @@ function addFilter(field, operator, values) {
     var filterOptions = availableFilters[field];
     if (!filterOptions) return;
     if (filterOptions['type'] == "date" || filterOptions['type'] == "date_past" ) {
-      buildDateTimeFilterRow(field, values);
+      buildDateTimeFilterRow(field, operator, values);
     } else {
       buildFilterRow(field, operator, values);
     }
@@ -22,7 +22,7 @@ function addFilter(field, operator, values) {
   });
 }
 
-function buildDateTimeFilterRow(field, values) {
+function buildDateTimeFilterRow(field, operator, values) {
   var fieldId = field.replace('.', '_');
   var filterTable = $("#filters-table");
   var filterOptions = availableFilters[field];
@@ -33,6 +33,18 @@ function buildDateTimeFilterRow(field, values) {
     '<td class="values"></td>'
   );
   filterTable.append(tr);
+
+  // Populate list of operators for this filter
+  var i, select;
+  var operators = operatorByType[filterOptions['type']];
+  select = tr.find('td.operator select');
+  for (i = 0; i < operators.length; i++) {
+    var option = $('<option>').val(operators[i]).text(operatorLabels[operators[i]]);
+    if (operators[i] == operator) { option.attr('selected', true); }
+    select.append(option);
+  }
+  select.change(function(){ toggleOperator(field); });
+
   tr.find('td.values').append(
     '<span style="display:none;"><input type="text" name="v['+field+'][]" id="values_'+fieldId+'_1" size="10" class="value date_value" /></span>' +
     ' <span style="display:none;"><input type="text" name="v['+field+'][]" id="values_'+fieldId+'_2" size="10" class="value date_value" /></span>' +
