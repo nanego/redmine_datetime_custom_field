@@ -16,4 +16,5 @@ require_dependency 'redmine_datetime_custom_field/hooks'
 Rails.application.config.to_prepare do
   require_dependency 'redmine_datetime_custom_field/application_helper_patch'
   require_dependency 'redmine_datetime_custom_field/field_format_patch'
+  require_dependency 'redmine_datetime_custom_field/custom_fields_helper_patch'
 end

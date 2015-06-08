@@ -49,4 +49,35 @@ module ApplicationHelper
     end
   end
 
+  unless instance_methods.include?(:format_object_with_datetime_custom_field)
+    def format_object_with_datetime_custom_field(object, html=true, &block)
+      if (object.class.name=='CustomValue' || object.class.name== 'CustomFieldValue') && object.custom_field
+        f = object.custom_field.format.formatted_custom_value(self, object, html)
+        if f.nil? || f.is_a?(String)
+          f
+        else
+          if f.class.name=='Time'
+            format_time_without_zone(f)
+          else
+            format_object_without_datetime_custom_field(object, html, &block)
+          end
+        end
+      else
+        format_object_without_datetime_custom_field(object, html, &block)
+      end
+    end
+    alias_method_chain :format_object, :datetime_custom_field
+  end
+
+  def format_time_without_zone(time, include_date = true)
+    return nil unless time
+    options = {}
+    options[:format] = (Setting.time_format.blank? ? :time : Setting.time_format)
+    options[:locale] = User.current.language unless User.current.language.blank?
+    time = time.to_time if time.is_a?(String)
+    # zone = User.current.time_zone
+    # local = zone ? time.in_time_zone(zone) : (time.utc? ? time.localtime : time)
+    (include_date ? "#{format_date(time)} " : "") + ::I18n.l(time, options)
+  end
+
 end
