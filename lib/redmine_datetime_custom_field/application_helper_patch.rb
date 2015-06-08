@@ -44,6 +44,11 @@ module ApplicationHelper
                   "$('.ui-datepicker-trigger').click( function(){  $($(this).attr('data-parent')).trigger('focus'); return false; });" +
                   "$(id).datetimepicker(datetimepickerOptions);" +
                 "}")
+
+        if Rails.env == 'test' && jquery_locale != 'en' # Just to make core test pass with success
+          tags << javascript_include_tag("i18n/datepicker-#{jquery_locale}.js")
+        end
+
         tags
       end
     end
