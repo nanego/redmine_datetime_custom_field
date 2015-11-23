@@ -11,7 +11,7 @@ module Redmine
       end
 
       def validate_single_value(custom_field, value, customized=nil)
-        if ((value =~ /^\d{4}-\d{2}-\d{2}$/ && custom_field.show_hours!='1') || (value =~ /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/ && custom_field.show_hours=='1')) && (value.to_date rescue false)
+        if (((value =~ /^\d{4}-\d{2}-\d{2}$/ || value =~ /^\d{2}\/\d{2}\/\d{4}$/) && custom_field.show_hours!='1') || ((value =~ /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/ || value =~ /^\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}$/) && custom_field.show_hours=='1')) && (value.to_date rescue false)
           []
         else
           [::I18n.t('activerecord.errors.messages.not_a_date')]
@@ -29,6 +29,18 @@ module Redmine
             bulk_clear_tag(view, tag_id, tag_name, custom_field, value)
       end
 
+    end
+  end
+end
+
+# Override standard Redmine date validator in order to add the dd/mm/YYYY format to the default YYYY-mm-dd
+class DateValidator < ActiveModel::EachValidator
+  def validate_each(record, attribute, value)
+    before_type_cast = record.attributes_before_type_cast[attribute.to_s]
+    if before_type_cast.is_a?(String) && before_type_cast.present?
+      unless (before_type_cast =~ /\A\d{4}-\d{2}-\d{2}( 00:00:00)?\z/ || before_type_cast =~ /\A\d{2}\/\d{2}\/\d{4}( 00:00:00)?\z/) && value
+        record.errors.add attribute, :not_a_date
+      end
     end
   end
 end
