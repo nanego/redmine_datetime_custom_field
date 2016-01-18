@@ -4,6 +4,7 @@ require_dependency 'issue_query'
 class Query
   unless instance_methods.include?(:validate_query_filters_with_datetime_custom_field)
     def validate_query_filters_with_datetime_custom_field
+
       filters.each_key do |field|
         if values_for(field)
           case type_for(field)
@@ -32,7 +33,7 @@ class Query
             # filter requires one or more values
             (values_for(field) and !values_for(field).first.blank?) or
                 # filter doesn't require any value
-                ["o", "c", "!*", "*", "t", "ld", "w", "lw", "l2w", "m", "lm", "y"].include? operator_for(field)
+                ["o", "c", "!*", "*", "t", "ld", "w", "lw", "l2w", "m", "lm", "y", "*o", "!o"].include? operator_for(field)
       end if filters
     end
     alias_method_chain :validate_query_filters, :datetime_custom_field
