@@ -38,4 +38,58 @@ class Query
     end
     alias_method_chain :validate_query_filters, :datetime_custom_field
   end
+
+  def quoted_time(time, is_custom_filter)
+    if is_custom_filter
+      # Custom field values are stored as strings in the DB
+      # using this format that does not depend on DB date representation
+      if Rails.env.test?
+        time.strftime("%Y-%m-%d %H:%M:%S")
+      else
+        time.strftime("%d/%m/%Y %H:%M") #Custom format
+      end
+    else
+      self.class.connection.quoted_date(time)
+    end
+  end
+
+  # Returns a SQL clause for a date or datetime field.
+  def date_clause(table, field, from, to, is_custom_filter)
+    s = []
+    if from
+      if from.is_a?(Date)
+        from = Time.local(from.year, from.month, from.day).yesterday.end_of_day
+      else
+        from = from - 1 # second
+      end
+      if self.class.default_timezone == :utc
+        from = from.utc
+      end
+
+      ### Patch Start
+      if is_custom_filter && self.class.connection.kind_of?(ActiveRecord::ConnectionAdapters::PostgreSQLAdapter) && !Rails.env.test?
+        s << ("to_timestamp(#{table}.#{field},'DD/MM/YYYY HH24:MI') > to_timestamp('%s','DD/MM/YYYY HH24:MI')" % [quoted_time(from, is_custom_filter)])
+      else
+        s << ("#{table}.#{field} > '%s'" % [quoted_time(from, is_custom_filter)])
+      end
+      ### Patch End
+    end
+    if to
+      if to.is_a?(Date)
+        to = Time.local(to.year, to.month, to.day).end_of_day
+      end
+      if self.class.default_timezone == :utc
+        to = to.utc
+      end
+      ### Patch Start
+      if is_custom_filter && self.class.connection.kind_of?(ActiveRecord::ConnectionAdapters::PostgreSQLAdapter) && !Rails.env.test?
+        s << ("to_timestamp(#{table}.#{field},'DD/MM/YYYY HH24:MI') <= to_timestamp('%s','DD/MM/YYYY HH24:MI')" % [quoted_time(to, is_custom_filter)])
+      else
+        s << ("#{table}.#{field} <= '%s'" % [quoted_time(to, is_custom_filter)])
+      end
+      ### Patch End
+    end
+    s.join(' AND ')
+  end
+
 end
