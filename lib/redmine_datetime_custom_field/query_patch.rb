@@ -2,6 +2,7 @@ require_dependency 'query'
 require_dependency 'issue_query'
 
 class Query
+
   unless instance_methods.include?(:validate_query_filters_with_datetime_custom_field)
     def validate_query_filters_with_datetime_custom_field
 
@@ -9,9 +10,9 @@ class Query
         if values_for(field)
           case type_for(field)
             when :integer
-              add_filter_error(field, :invalid) if values_for(field).detect {|v| v.present? && !v.match(/^[+-]?\d+$/) }
+              add_filter_error(field, :invalid) if values_for(field).detect {|v| v.present? && !v.match(/\A[+-]?\d+(,[+-]?\d+)*\z/) }
             when :float
-              add_filter_error(field, :invalid) if values_for(field).detect {|v| v.present? && !v.match(/^[+-]?\d+(\.\d*)?$/) }
+              add_filter_error(field, :invalid) if values_for(field).detect {|v| v.present? && !v.match(/\A[+-]?\d+(\.\d*)?\z/) }
             when :date, :date_past
               case operator_for(field)
                 when "=", ">=", "<=", "><"
