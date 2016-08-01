@@ -58,7 +58,7 @@ class Query
     s = []
     if from
       if from.is_a?(Date)
-        from = Time.local(from.year, from.month, from.day).yesterday.end_of_day
+        from = date_for_user_time_zone(from.year, from.month, from.day).yesterday.end_of_day
       else
         from = from - 1 # second
       end
@@ -73,14 +73,16 @@ class Query
         s << ("#{table}.#{field} > '%s'" % [quoted_time(from, is_custom_filter)])
       end
       ### Patch End
+
     end
     if to
       if to.is_a?(Date)
-        to = Time.local(to.year, to.month, to.day).end_of_day
+        to = date_for_user_time_zone(to.year, to.month, to.day).end_of_day
       end
       if self.class.default_timezone == :utc
         to = to.utc
       end
+
       ### Patch Start
       if is_custom_filter && self.class.connection.kind_of?(ActiveRecord::ConnectionAdapters::PostgreSQLAdapter) && !Rails.env.test?
         s << ("to_timestamp(#{table}.#{field},'DD/MM/YYYY HH24:MI') <= to_timestamp('%s','DD/MM/YYYY HH24:MI')" % [quoted_time(to, is_custom_filter)])
@@ -88,6 +90,7 @@ class Query
         s << ("#{table}.#{field} <= '%s'" % [quoted_time(to, is_custom_filter)])
       end
       ### Patch End
+
     end
     s.join(' AND ')
   end
