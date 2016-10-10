@@ -35,9 +35,10 @@ module ApplicationHelper
         start_of_week = start_of_week.to_i % 7
         jquery_locale = l('jquery.locale', :default => current_language.to_s)
         tags << javascript_tag(
+                "jQuery.datetimepicker.setLocale('#{jquery_locale}');" +
                 "var datetimepickerOptions={format: 'd/m/Y', dayOfWeekStart: #{start_of_week}," +
                   "closeOnDateSelect:true," +
-                  "lang:'#{jquery_locale}', id:'datetimepicker'," +
+                  "id:'datetimepicker'," +
                   "onShow: function( currentDateTime ){" +
                     "if( $('#custom_field_show_hours_yes').length==0 ) return;" +
                     "this.setOptions( { format: ( $('#custom_field_show_hours_yes').prop('checked') ? 'd/m/Y H:i' : 'd/m/Y' )," +
