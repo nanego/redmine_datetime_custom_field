@@ -47,7 +47,7 @@ module ApplicationHelper
                 "function datetimepickerCreate(id){" +
                   "$(id).after( '<input alt=\"...\" class=\"ui-datepicker-trigger\" data-parent=\"'+id+'\" src=\"" + image_path('calendar.png') + "\" title=\"...\" type=\"image\"/>' );" +
                   "$('.ui-datepicker-trigger').click( function(){  $($(this).attr('data-parent')).trigger('focus'); return false; });" +
-                  "$(id).datetimepicker(datetimepickerOptions);" +
+                  "$(id).datetimepicker(datetimepickerOptions).attr('type', 'text');" +
                 "}")
 
         if Rails.env == 'test' && jquery_locale != 'en' # Just to make core test pass with success
