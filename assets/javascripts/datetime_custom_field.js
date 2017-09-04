@@ -2,17 +2,28 @@
 function addFilter(field, operator, values) {
   var fieldId = field.replace('.', '_');
   var tr = $('#tr_'+fieldId);
+
+  var filterOptions = availableFilters[field];
+  if (!filterOptions) return;
+
+  if (filterOptions['remote'] && filterOptions['values'] == null) {
+    $.getJSON(filtersUrl, {'name': field}).done(function(data) {
+      filterOptions['values'] = data;
+      addFilter(field, operator, values) ;
+    });
+    return;
+  }
+
   if (tr.length > 0) {
     tr.show();
   } else {
-    var filterOptions = availableFilters[field];
-    if (!filterOptions) return;
     if (filterOptions['type'] == "date" || filterOptions['type'] == "date_past" ) {
       buildDateTimeFilterRow(field, operator, values);
     } else {
       buildFilterRow(field, operator, values);
     }
   }
+
   $('#cb_'+fieldId).prop('checked', true);
   toggleFilter(field);
   $('#add_filter_select').val('').children('option').each(function() {
