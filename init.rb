@@ -7,7 +7,7 @@ Redmine::Plugin.register :redmine_datetime_custom_field do
   version '3.3.0'
   url 'https://github.com/nanego/redmine_datetime_custom_field'
   author_url 'mailto:contact@vincent-robert.com'
-  requires_redmine :version_or_higher => '3.3.0'
+  requires_redmine :version_or_higher => '3.4.0'
   requires_redmine_plugin :redmine_base_deface, :version_or_higher => '0.0.1'
 end
 
