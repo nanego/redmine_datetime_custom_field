@@ -39,6 +39,7 @@ module ApplicationHelper
                 "var datetimepickerOptions={format: 'd/m/Y', dayOfWeekStart: #{start_of_week}," +
                   "closeOnDateSelect:true," +
                   "id:'datetimepicker'," +
+                  "step: 1," +
                   "onShow: function( currentDateTime ){" +
                     "if( $('#custom_field_show_hours_yes').length==0 ) return;" +
                     "this.setOptions( { format: ( $('#custom_field_show_hours_yes').prop('checked') ? 'd/m/Y H:i' : 'd/m/Y' )," +
