@@ -25,6 +25,7 @@ module PluginDatetimeCustomField
   end
 end
 ApplicationHelper.prepend PluginDatetimeCustomField::ApplicationHelper
+ActionView::Base.prepend ApplicationHelper
 
 module ApplicationHelper
   def format_time_without_zone(time, include_date = true)
