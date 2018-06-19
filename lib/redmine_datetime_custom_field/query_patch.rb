@@ -64,10 +64,14 @@ class Query
       end
 
       ### Patch Start
-      if is_custom_filter && self.class.connection.kind_of?(ActiveRecord::ConnectionAdapters::PostgreSQLAdapter) && !Rails.env.test?
+      if is_custom_filter && self.class.connection.adapter_name == "postgresql" && !Rails.env.test?
         s << ("to_timestamp(#{table}.#{field},'DD/MM/YYYY HH24:MI') > to_timestamp('%s','DD/MM/YYYY HH24:MI')" % [quoted_time(from, is_custom_filter)])
       else
-        s << ("#{table}.#{field} > '%s'" % [quoted_time(from, is_custom_filter)])
+        if table.classify.constantize.columns_hash[field].type == :date
+          s << ("#{table}.#{field} > '%s'" % [quoted_time(from, is_custom_filter)])
+        else
+          s << ("STR_TO_DATE(#{table}.#{field},'%d/%m/%Y') > STR_TO_DATE('" + quoted_time(from, is_custom_filter) + "','%d/%m/%Y')")
+        end
       end
       ### Patch End
 
@@ -81,10 +85,14 @@ class Query
       end
 
       ### Patch Start
-      if is_custom_filter && self.class.connection.kind_of?(ActiveRecord::ConnectionAdapters::PostgreSQLAdapter) && !Rails.env.test?
+      if is_custom_filter && self.class.connection.adapter_name == "postgresql" && !Rails.env.test?
         s << ("to_timestamp(#{table}.#{field},'DD/MM/YYYY HH24:MI') <= to_timestamp('%s','DD/MM/YYYY HH24:MI')" % [quoted_time(to, is_custom_filter)])
       else
-        s << ("#{table}.#{field} <= '%s'" % [quoted_time(to, is_custom_filter)])
+        if table.classify.constantize.columns_hash[field].type == :date
+          s << ("#{table}.#{field} <= '%s'" % [quoted_time(to, is_custom_filter)])
+        else
+          s << ("STR_TO_DATE(#{table}.#{field},'%d/%m/%Y') <= STR_TO_DATE('"+quoted_time(to, is_custom_filter)+"','%d/%m/%Y')")
+        end
       end
       ### Patch End
 
