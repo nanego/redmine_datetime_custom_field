@@ -7,24 +7,24 @@ class Query
     filters.each_key do |field|
       if values_for(field)
         case type_for(field)
-          when :integer
-            add_filter_error(field, :invalid) if values_for(field).detect {|v| v.present? && !v.match(/\A[+-]?\d+(,[+-]?\d+)*\z/) }
-          when :float
-            add_filter_error(field, :invalid) if values_for(field).detect {|v| v.present? && !v.match(/\A[+-]?\d+(\.\d*)?\z/) }
-          when :date, :date_past
-            case operator_for(field)
-              when "=", ">=", "<=", "><"
-                add_filter_error(field, :invalid) if values_for(field).detect {|v|
+        when :integer
+          add_filter_error(field, :invalid) if values_for(field).detect {|v| v.present? && !v.match(/\A[+-]?\d+(,[+-]?\d+)*\z/)}
+        when :float
+          add_filter_error(field, :invalid) if values_for(field).detect {|v| v.present? && !v.match(/\A[+-]?\d+(\.\d*)?\z/)}
+        when :date, :date_past
+          case operator_for(field)
+          when "=", ">=", "<=", "><"
+            add_filter_error(field, :invalid) if values_for(field).detect {|v|
 
-                  ### CUSTOM BEGIN
-                  # add new valid date format
-                  v.present? && ((!v.match(/\A\d{4}-\d{2}-\d{2}(T\d{2}((:)?\d{2}){0,2}(Z|\d{2}:?\d{2})?)?\z/) && !v.match(/\A\d{2}\/\d{2}\/\d{4}(T\d{2}((:)?\d{2}){0,2}(Z|\d{2}:?\d{2})?)?\z/)) || parse_date(v).nil?)
-                  ### CUSTOM END
+              ### CUSTOM BEGIN
+              # add new valid date format
+              v.present? && ((!v.match(/\A\d{4}-\d{2}-\d{2}(T\d{2}((:)?\d{2}){0,2}(Z|\d{2}:?\d{2})?)?\z/) && !v.match(/\A\d{2}\/\d{2}\/\d{4}(T\d{2}((:)?\d{2}){0,2}(Z|\d{2}:?\d{2})?)?\z/)) || parse_date(v).nil?)
+              ### CUSTOM END
 
-                }
-              when ">t-", "<t-", "t-", ">t+", "<t+", "t+", "><t+", "><t-"
-                add_filter_error(field, :invalid) if values_for(field).detect {|v| v.present? && !v.match(/^\d+$/) }
-            end
+            }
+          when ">t-", "<t-", "t-", ">t+", "<t+", "t+", "><t+", "><t-"
+            add_filter_error(field, :invalid) if values_for(field).detect {|v| v.present? && !v.match(/^\d+$/)}
+          end
         end
       end
 
@@ -67,7 +67,7 @@ class Query
       if is_custom_filter && self.class.connection.adapter_name == "postgresql" && !Rails.env.test?
         s << ("to_timestamp(#{table}.#{field},'DD/MM/YYYY HH24:MI') > to_timestamp('%s','DD/MM/YYYY HH24:MI')" % [quoted_time(from, is_custom_filter)])
       else
-        if table.classify.constantize.columns_hash[field].type == :date
+        if table.classify.constantize.columns_hash[field].type == :date || table.classify.constantize.columns_hash[field].type == :datetime
           s << ("#{table}.#{field} > '%s'" % [quoted_time(from, is_custom_filter)])
         else
           s << ("STR_TO_DATE(#{table}.#{field},'%d/%m/%Y') > STR_TO_DATE('" + quoted_time(from, is_custom_filter) + "','%d/%m/%Y')")
@@ -88,10 +88,10 @@ class Query
       if is_custom_filter && self.class.connection.adapter_name == "postgresql" && !Rails.env.test?
         s << ("to_timestamp(#{table}.#{field},'DD/MM/YYYY HH24:MI') <= to_timestamp('%s','DD/MM/YYYY HH24:MI')" % [quoted_time(to, is_custom_filter)])
       else
-        if table.classify.constantize.columns_hash[field].type == :date
+        if table.classify.constantize.columns_hash[field].type == :date || table.classify.constantize.columns_hash[field].type == :datetime
           s << ("#{table}.#{field} <= '%s'" % [quoted_time(to, is_custom_filter)])
         else
-          s << ("STR_TO_DATE(#{table}.#{field},'%d/%m/%Y') <= STR_TO_DATE('"+quoted_time(to, is_custom_filter)+"','%d/%m/%Y')")
+          s << ("STR_TO_DATE(#{table}.#{field},'%d/%m/%Y') <= STR_TO_DATE('" + quoted_time(to, is_custom_filter) + "','%d/%m/%Y')")
         end
       end
       ### Patch End
