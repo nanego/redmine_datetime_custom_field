@@ -67,7 +67,7 @@ class Query
       if is_custom_filter && self.class.connection.adapter_name == "postgresql" && !Rails.env.test?
         s << ("to_timestamp(#{table}.#{field},'DD/MM/YYYY HH24:MI') > to_timestamp('%s','DD/MM/YYYY HH24:MI')" % [quoted_time(from, is_custom_filter)])
       else
-        if table.classify.constantize.columns_hash[field].type == :date || table.classify.constantize.columns_hash[field].type == :datetime
+        if table.classify.constantize.columns_hash[field].type == :date || table.classify.constantize.columns_hash[field].type == :datetime || Rails.env.test?
           s << ("#{table}.#{field} > '%s'" % [quoted_time(from, is_custom_filter)])
         else
           s << ("STR_TO_DATE(#{table}.#{field},'%d/%m/%Y') > STR_TO_DATE('" + quoted_time(from, is_custom_filter) + "','%d/%m/%Y')")
@@ -88,7 +88,7 @@ class Query
       if is_custom_filter && self.class.connection.adapter_name == "postgresql" && !Rails.env.test?
         s << ("to_timestamp(#{table}.#{field},'DD/MM/YYYY HH24:MI') <= to_timestamp('%s','DD/MM/YYYY HH24:MI')" % [quoted_time(to, is_custom_filter)])
       else
-        if table.classify.constantize.columns_hash[field].type == :date || table.classify.constantize.columns_hash[field].type == :datetime
+        if table.classify.constantize.columns_hash[field].type == :date || table.classify.constantize.columns_hash[field].type == :datetime || Rails.env.test?
           s << ("#{table}.#{field} <= '%s'" % [quoted_time(to, is_custom_filter)])
         else
           s << ("STR_TO_DATE(#{table}.#{field},'%d/%m/%Y') <= STR_TO_DATE('" + quoted_time(to, is_custom_filter) + "','%d/%m/%Y')")
