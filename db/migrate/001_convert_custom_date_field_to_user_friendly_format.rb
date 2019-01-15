@@ -1,4 +1,4 @@
-class ConvertCustomDateFieldToUserFriendlyFormat < ActiveRecord::Migration
+class ConvertCustomDateFieldToUserFriendlyFormat < ActiveRecord::Migration[4.2]
   def self.up
     cfs = CustomField.where(:field_format => "date", type: "IssueCustomField")
     cfs.each do |cf|
