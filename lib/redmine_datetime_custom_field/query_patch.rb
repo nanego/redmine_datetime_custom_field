@@ -64,7 +64,7 @@ class Query
       end
 
       ### Patch Start
-      if is_custom_filter && self.class.connection.adapter_name == "postgresql" && !Rails.env.test?
+      if is_custom_filter && self.class.connection.adapter_name.downcase.to_sym == :postgresql && !Rails.env.test?
         s << ("to_timestamp(#{table}.#{field},'DD/MM/YYYY HH24:MI') > to_timestamp('%s','DD/MM/YYYY HH24:MI')" % [quoted_time(from, is_custom_filter)])
       else
         if Rails.env.test? || table.classify.constantize.columns_hash[field].type == :date || table.classify.constantize.columns_hash[field].type == :datetime
@@ -85,7 +85,7 @@ class Query
       end
 
       ### Patch Start
-      if is_custom_filter && self.class.connection.adapter_name == "postgresql" && !Rails.env.test?
+      if is_custom_filter && self.class.connection.adapter_name.downcase.to_sym == :postgresql && !Rails.env.test?
         s << ("to_timestamp(#{table}.#{field},'DD/MM/YYYY HH24:MI') <= to_timestamp('%s','DD/MM/YYYY HH24:MI')" % [quoted_time(to, is_custom_filter)])
       else
         if Rails.env.test? || table.classify.constantize.columns_hash[field].type == :date || table.classify.constantize.columns_hash[field].type == :datetime
