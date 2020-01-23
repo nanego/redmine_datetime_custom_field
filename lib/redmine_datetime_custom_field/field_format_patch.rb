@@ -29,6 +29,10 @@ module Redmine
             bulk_clear_tag(view, tag_id, tag_name, custom_field, value)
       end
 
+      def order_statement(custom_field)
+        Arel.sql "to_timestamp(#{join_alias custom_field}.value, 'DD/MM/YYYY HH24:MI')"
+      end
+
     end
   end
 end
