@@ -8,22 +8,20 @@ class Query
       if values_for(field)
         case type_for(field)
         when :integer
-          add_filter_error(field, :invalid) if values_for(field).detect {|v| v.present? && !v.match(/\A[+-]?\d+(,[+-]?\d+)*\z/)}
+          add_filter_error(field, :invalid) if values_for(field).detect {|v| v.present? && !/\A[+-]?\d+(,[+-]?\d+)*\z/.match?(v) }
         when :float
-          add_filter_error(field, :invalid) if values_for(field).detect {|v| v.present? && !v.match(/\A[+-]?\d+(\.\d*)?\z/)}
+          add_filter_error(field, :invalid) if values_for(field).detect {|v| v.present? && !/\A[+-]?\d+(\.\d*)?\z/.match?(v) }
         when :date, :date_past
           case operator_for(field)
           when "=", ">=", "<=", "><"
             add_filter_error(field, :invalid) if values_for(field).detect {|v|
-
               ### CUSTOM BEGIN
               # add new valid date format
-              v.present? && ((!v.match(/\A\d{4}-\d{2}-\d{2}(T\d{2}((:)?\d{2}){0,2}(Z|\d{2}:?\d{2})?)?\z/) && !v.match(/\A\d{2}\/\d{2}\/\d{4}(T\d{2}((:)?\d{2}){0,2}(Z|\d{2}:?\d{2})?)?\z/)) || parse_date(v).nil?)
+              v.present? && ((!/\A\d{4}-\d{2}-\d{2}(T\d{2}((:)?\d{2}){0,2}(Z|\d{2}:?\d{2})?)?\z/.match?(v) && !v.match(/\A\d{2}\/\d{2}\/\d{4}(T\d{2}((:)?\d{2}){0,2}(Z|\d{2}:?\d{2})?)?\z/)) || parse_date(v).nil?)
               ### CUSTOM END
-
             }
           when ">t-", "<t-", "t-", ">t+", "<t+", "t+", "><t+", "><t-"
-            add_filter_error(field, :invalid) if values_for(field).detect {|v| v.present? && !v.match(/^\d+$/)}
+            add_filter_error(field, :invalid) if values_for(field).detect {|v| v.present? && !/^\d+$/.match?(v) }
           end
         end
       end
@@ -32,7 +30,7 @@ class Query
           # filter requires one or more values
           (values_for(field) and !values_for(field).first.blank?) or
               # filter doesn't require any value
-              ["o", "c", "!*", "*", "t", "ld", "w", "lw", "l2w", "m", "lm", "y", "*o", "!o"].include? operator_for(field)
+              ["o", "c", "!*", "*", "nd", "t", "ld", "nw", "w", "lw", "l2w", "nm", "m", "lm", "y", "*o", "!o"].include? operator_for(field)
     end if filters
   end
 
