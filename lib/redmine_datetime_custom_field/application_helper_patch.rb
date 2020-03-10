@@ -41,7 +41,10 @@ module ApplicationHelper
 
   def calendar_for(field_id, showHours=nil)
 
-    showHours = true if field_id == 'issue_due_date' || field_id == 'issue_start_date'
+    if (field_id == 'issue_start_date' && Setting['plugin_redmine_datetime_custom_field']['start_date_as_datetime'] == 'true') ||
+        (field_id == 'issue_due_date' && Setting['plugin_redmine_datetime_custom_field']['due_date_as_datetime'] == 'true')
+      showHours = true
+    end
 
     include_calendar_headers_tags
     javascript_tag("$(function() {" +

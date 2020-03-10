@@ -1,0 +1,9 @@
+<div>
+  <span><%= check_box_tag "settings[start_date_as_datetime]", true, Setting['plugin_redmine_datetime_custom_field']['start_date_as_datetime'] == 'true', :id => "setting_start_date_as_datetime" %></span>
+  <span><%= l(:start_date_as_datetime) %></span>
+</div>
+
+<div>
+  <span><%= check_box_tag "settings[due_date_as_datetime]", true, Setting['plugin_redmine_datetime_custom_field']['due_date_as_datetime'] == 'true', :id => "setting_due_date_as_datetime" %></span>
+  <span><%= l(:due_date_as_datetime) %></span>
+</div>

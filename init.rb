@@ -9,6 +9,9 @@ Redmine::Plugin.register :redmine_datetime_custom_field do
   author_url 'mailto:contact@vincent-robert.com'
   requires_redmine :version_or_higher => '3.4.0'
   requires_redmine_plugin :redmine_base_deface, :version_or_higher => '0.0.1'
+  settings :default => {'due_date_as_datetime' => 'false',
+                        'start_date_as_datetime' => 'false'},
+           :partial => 'settings/redmine_plugin_datetime_custom_field'
 end
 
 # Custom patches

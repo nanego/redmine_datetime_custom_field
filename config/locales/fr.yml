@@ -1,0 +1,3 @@
+fr:
+  start_date_as_datetime: "Permettre la saisie des heures dans le champ 'Date de début'"
+  due_date_as_datetime: "Permettre la saisie des heures dans le champ 'Date d'échéance'"
