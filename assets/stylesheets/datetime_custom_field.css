@@ -1,3 +1,7 @@
+input#issue_due_date, input#issue_start_date {
+    min-width: 114px;
+}
+
 input.ui-datepicker-trigger {
     color: #333;
     background-color: transparent;

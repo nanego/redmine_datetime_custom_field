@@ -36,10 +36,13 @@ module ApplicationHelper
     time = time.to_time if time.is_a?(String)
     # zone = User.current.time_zone
     # local = zone ? time.in_time_zone(zone) : (time.utc? ? time.localtime : time)
-    (include_date ? "#{format_date(time)} " : "") + ::I18n.l(time, options)
+    (include_date ? "#{format_date(time.to_date)} " : "") + ::I18n.l(time, options)
   end
 
   def calendar_for(field_id, showHours=nil)
+
+    showHours = true if field_id == 'issue_due_date' || field_id == 'issue_start_date'
+
     include_calendar_headers_tags
     javascript_tag("$(function() {" +
                        (showHours ? "datetimepickerOptions.timepicker=true; datetimepickerOptions.format='d/m/Y H:i';" : "datetimepickerOptions.timepicker=false;datetimepickerOptions.format='d/m/Y';") +
