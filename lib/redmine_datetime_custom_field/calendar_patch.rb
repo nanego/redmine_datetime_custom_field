@@ -8,8 +8,8 @@ module Redmine
       # Sets calendar events
       def events=(events)
         @events = events
-        @ending_events_by_days = @events.group_by {|event| event.due_date.to_date}
-        @starting_events_by_days = @events.group_by {|event| event.start_date.to_date}
+        @ending_events_by_days = @events.group_by {|event| event.due_date.present? ? event.due_date.to_date : event.due_date}
+        @starting_events_by_days = @events.group_by {|event| event.start_date.present? ? event.start_date.to_date : event.start_date}
       end
     end
 
