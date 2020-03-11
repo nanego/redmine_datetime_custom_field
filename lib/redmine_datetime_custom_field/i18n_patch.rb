@@ -5,8 +5,7 @@ module Redmine
 
     def format_date(date, only_date=false)
       return nil unless date
-      if date.is_a?(ActiveSupport::TimeWithZone) &&
-          Setting['plugin_redmine_datetime_custom_field']['start_date_as_datetime'] == 'true' &&
+      if (date.is_a?(ActiveSupport::TimeWithZone) || date.is_a?(DateTime)) &&
           !only_date
         return "#{format_date(date.to_date)} #{format_time_without_zone(date, false)}"
       end
