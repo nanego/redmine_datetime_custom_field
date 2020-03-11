@@ -28,17 +28,6 @@ ApplicationHelper.prepend PluginDatetimeCustomField::ApplicationHelper
 ActionView::Base.prepend ApplicationHelper
 
 module ApplicationHelper
-  def format_time_without_zone(time, include_date = true)
-    return nil unless time
-    options = {}
-    options[:format] = (Setting.time_format.blank? ? :time : Setting.time_format)
-    options[:locale] = User.current.language unless User.current.language.blank?
-    time = time.to_time if time.is_a?(String)
-    # zone = User.current.time_zone
-    # local = zone ? time.in_time_zone(zone) : (time.utc? ? time.localtime : time)
-    (include_date ? "#{format_date(time.to_date)} " : "") + ::I18n.l(time, options)
-  end
-
   def calendar_for(field_id, showHours=nil)
 
     if (field_id == 'issue_start_date' && Setting['plugin_redmine_datetime_custom_field']['start_date_as_datetime'] == 'true') ||
