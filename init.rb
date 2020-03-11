@@ -25,6 +25,7 @@ Rails.application.config.to_prepare do
   require_dependency 'redmine_datetime_custom_field/issues_helper_patch'
   require_dependency 'redmine_datetime_custom_field/gantt_patch'
   require_dependency 'redmine_datetime_custom_field/calendar_patch'
+  require_dependency 'redmine_datetime_custom_field/version_patch'
   require_dependency 'redmine_datetime_custom_field/i18n_patch'
   require_dependency 'redmine_datetime_custom_field/time_with_zone_patch'
 end
