@@ -3,7 +3,7 @@ Deface::Override.new :virtual_path => "common/_calendar",
                      :name => "convert_start_datetime_to_dates_in_calendars",
                      :replace => 'div:contains("render_issue_tooltip")',
                      :text => <<EOS
-<div class="<%= i.css_classes %> <%= 'starting' if day == i.start_date.to_date %> <%= 'ending' if day == i.due_date.to_date %> tooltip hascontextmenu">
+<div class="<%= i.css_classes %> <%= 'starting' if day == i.start_date.try(:to_date) %> <%= 'ending' if day == i.due_date.try(:to_date) %> tooltip hascontextmenu">
   <%= i.project.to_s + " -" unless @project && @project == i.project %>
   <%= link_to_issue i, :truncate => 30 %>
   <span class="tip"><%= render_issue_tooltip i %></span>
