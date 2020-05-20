@@ -1,0 +1,11 @@
+<% if Issue.due_date_format_is_datetime? %>
+  <%= f.datetime_field(:due_date,
+                       size: 10,
+                       required: @issue.required_attribute?('due_date'),
+                       value: f.object.due_date.try(:strftime,"%d/%m/%Y %H:%M" )) %>
+<% else %>
+  <%= f.date_field(:due_date,
+                   size: 10,
+                   required: @issue.required_attribute?('due_date'),
+                   value: f.object.due_date.try(:strftime,"%d/%m/%Y" )) %>
+<% end %>

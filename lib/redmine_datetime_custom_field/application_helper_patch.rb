@@ -6,13 +6,13 @@ end
 
 module PluginDatetimeCustomField
   module ApplicationHelper
-    def format_object(object, html=true, &block)
-      if (object.class.name=='CustomValue' || object.class.name== 'CustomFieldValue') && object.custom_field
+    def format_object(object, html = true, &block)
+      if (object.class.name == 'CustomValue' || object.class.name == 'CustomFieldValue') && object.custom_field
         f = object.custom_field.format.formatted_custom_value(self, object, html)
         if f.nil? || f.is_a?(String)
           f
         else
-          if f.class.name=='Time'
+          if f.class.name == 'Time'
             format_time_without_zone(f)
           else
             super
@@ -28,7 +28,7 @@ ApplicationHelper.prepend PluginDatetimeCustomField::ApplicationHelper
 ActionView::Base.prepend ApplicationHelper
 
 module ApplicationHelper
-  def calendar_for(field_id, showHours=nil)
+  def calendar_for(field_id, showHours = nil)
 
     if (field_id == 'issue_start_date' && Issue.start_date_format_is_datetime?) ||
         (field_id == 'issue_due_date' && Issue.due_date_format_is_datetime?)

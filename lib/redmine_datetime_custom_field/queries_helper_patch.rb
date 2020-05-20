@@ -5,11 +5,19 @@ module PluginDateTimeCustomField
 
     def column_value(column, issue, value)
       return super if value.nil?
-      if column.name == :start_date && Issue.start_date_format_is_datetime? == false
-        format_object(value.to_date)
-      else
-        if column.name == :due_date && Issue.due_date_format_is_datetime? == false
+      if column.name == :start_date
+        if Issue.start_date_format_is_datetime?
+          format_time(value)
+        else
           format_object(value.to_date)
+        end
+      else
+        if column.name == :due_date
+          if Issue.due_date_format_is_datetime?
+            format_time(value)
+          else
+            format_object(value.to_date)
+          end
         else
           super
         end

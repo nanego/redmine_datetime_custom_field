@@ -8,7 +8,7 @@ module PluginDateTimeCustomField
       if Issue.due_date_format_is_datetime?
         s = format_time_without_zone(issue.due_date)
       else
-        s = format_date(issue.due_date, true)
+        s = format_date(issue.due_date, false)
       end
       s += " (#{due_date_distance_in_words(issue.due_date)})" unless issue.closed?
       s
@@ -19,7 +19,7 @@ module PluginDateTimeCustomField
       if Issue.start_date_format_is_datetime?
         format_time_without_zone(issue.start_date)
       else
-        format_date(issue.start_date, true)
+        format_date(issue.start_date, false)
       end
     end
 
@@ -35,8 +35,8 @@ module PluginDateTimeCustomField
         setting = "#{field}_as_datetime"
 
         if Setting['plugin_redmine_datetime_custom_field'][setting] == 'true'
-          value = format_date(detail.value.to_datetime) if detail.value
-          old_value = format_date(detail.old_value.to_datetime) if detail.old_value
+          value = format_time_without_zone(detail.value) if detail.value
+          old_value = format_time_without_zone(detail.old_value) if detail.old_value
         else
           value = format_date(detail.value.to_date) if detail.value
           old_value = format_date(detail.old_value.to_date) if detail.old_value

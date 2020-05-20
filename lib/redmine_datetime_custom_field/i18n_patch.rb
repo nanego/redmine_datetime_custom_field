@@ -4,10 +4,10 @@ require_dependency 'application_helper'
 module Redmine
   module I18n
 
-    def format_date(date, only_date = true)
+    def format_date(date, include_time = false)
       return nil unless date
-      if only_date == false && (date.is_a?(ActiveSupport::TimeWithZone) || date.is_a?(DateTime))
-        return "#{format_date(date.to_date)} #{format_time_without_zone(date, false)}"
+      if include_time && (date.is_a?(ActiveSupport::TimeWithZone) || date.is_a?(DateTime))
+        return "#{format_date(date.to_date, false)} #{format_time_without_zone(date, false)}"
       end
       options = {}
       options[:format] = Setting.date_format unless Setting.date_format.blank?
@@ -19,10 +19,9 @@ module Redmine
       options = {}
       options[:format] = (Setting.time_format.blank? ? :time : Setting.time_format)
       options[:locale] = User.current.language unless User.current.language.blank?
-      time = time.to_time if time.is_a?(String)
-      # zone = User.current.time_zone
-      # local = zone ? time.in_time_zone(zone) : (time.utc? ? time.localtime : time)
-      (include_date ? "#{format_date(time.to_date)} " : "") + ::I18n.l(time, options)
+      time = time.to_time(:utc) if time.is_a?(String)
+      # local = user.convert_time_to_user_timezone(time)
+      (include_date ? "#{format_date(time.to_date, false)} " : "") + ::I18n.l(time, options)
     end
 
   end
