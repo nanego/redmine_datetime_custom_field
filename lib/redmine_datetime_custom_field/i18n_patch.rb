@@ -4,10 +4,9 @@ require_dependency 'application_helper'
 module Redmine
   module I18n
 
-    def format_date(date, only_date=false)
+    def format_date(date, only_date = true)
       return nil unless date
-      if (date.is_a?(ActiveSupport::TimeWithZone) || date.is_a?(DateTime)) &&
-          !only_date
+      if only_date == false && (date.is_a?(ActiveSupport::TimeWithZone) || date.is_a?(DateTime))
         return "#{format_date(date.to_date)} #{format_time_without_zone(date, false)}"
       end
       options = {}

@@ -30,8 +30,8 @@ ActionView::Base.prepend ApplicationHelper
 module ApplicationHelper
   def calendar_for(field_id, showHours=nil)
 
-    if (field_id == 'issue_start_date' && Setting['plugin_redmine_datetime_custom_field']['start_date_as_datetime'] == 'true') ||
-        (field_id == 'issue_due_date' && Setting['plugin_redmine_datetime_custom_field']['due_date_as_datetime'] == 'true')
+    if (field_id == 'issue_start_date' && Issue.start_date_format_is_datetime?) ||
+        (field_id == 'issue_due_date' && Issue.due_date_format_is_datetime?)
       showHours = true
     end
 

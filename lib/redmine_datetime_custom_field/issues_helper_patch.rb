@@ -5,7 +5,7 @@ module PluginDateTimeCustomField
 
     def issue_due_date_details(issue)
       return if issue&.due_date.nil?
-      if Setting['plugin_redmine_datetime_custom_field']['due_date_as_datetime'] == 'true'
+      if Issue.due_date_format_is_datetime?
         s = format_time_without_zone(issue.due_date)
       else
         s = format_date(issue.due_date, true)
@@ -16,7 +16,7 @@ module PluginDateTimeCustomField
 
     def issue_start_date_details(issue)
       return if issue&.start_date.nil?
-      if Setting['plugin_redmine_datetime_custom_field']['start_date_as_datetime'] == 'true'
+      if Issue.start_date_format_is_datetime?
         format_time_without_zone(issue.start_date)
       else
         format_date(issue.start_date, true)
