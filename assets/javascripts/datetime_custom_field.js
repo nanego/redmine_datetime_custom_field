@@ -31,6 +31,32 @@ function addFilter(field, operator, values) {
       $(this).attr('disabled', true);
     }
   });
+
+  // Patch
+  addSelect2ToSelectTags()
+}
+
+function toggleMultiSelect(el) {
+  if (el.attr('multiple')) {
+    el.removeAttr('multiple');
+    el.attr('size', 1);
+  } else {
+    el.attr('multiple', true);
+    if (el.children().length > 10)
+      el.attr('size', 10);
+    else
+      el.attr('size', 4);
+  }
+  // Patch
+  addSelect2ToSelectTags()
+}
+
+function addSelect2ToSelectTags() {
+  $(document).ready(function(){
+    if ((typeof $().select2) === 'function') {
+      $('#filters select.value').select2()
+    }
+  })
 }
 
 function buildDateTimeFilterRow(field, operator, values) {
