@@ -54,7 +54,10 @@ function toggleMultiSelect(el) {
 function addSelect2ToSelectTags() {
   $(document).ready(function(){
     if ((typeof $().select2) === 'function') {
-      $('#filters select.value').select2()
+      $('#filters select.value').select2({
+        containerCss: {width: '300px', minwidth: '300px'},
+        width: 'style'
+      })
     }
   })
 }
