@@ -114,3 +114,10 @@ function beforeShowDatePicker(input, inst) {
   datetimepickerCreate($(input).attr("id"));
   // $(input).datepicker("option", "defaultDate", default_date);
 }
+
+function nowShortcut(cf_id, show_hours) {
+  var now = new Date();
+  var now_str = now.getDate() + "/" + (now.getMonth()+1) + "/" + now.getFullYear();
+  if(show_hours == '1'){now_str += " " + now.getHours() + ":" + String(now.getMinutes()).padStart(2, '0')}
+  $("input#issue_custom_field_values_"+cf_id).val(now_str);
+}

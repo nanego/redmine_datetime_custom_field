@@ -1,11 +1,11 @@
 #encoding: utf-8
 
 # Replace this line : <p><%= f.text_field(:default_value, :size => 10) %></p>
-Deface::Override.new :virtual_path  => "custom_fields/formats/_date",
+Deface::Override.new :virtual_path => "custom_fields/formats/_date",
                      :original => '2ff0827cd257851767160ff1480a6961a2b3b41f',
-                     :name          => "add_time_to_date_field",
-                     :replace      => "p:first-child",
-                     :text          => <<-EOS
+                     :name => "add_time_to_date_field",
+                     :replace => "p:first-child",
+                     :text => <<-EOS
 <p>
 	<%= f.text_field(:default_value, :size => 15) %>
 </p>
@@ -21,5 +21,11 @@ Deface::Override.new :virtual_path  => "custom_fields/formats/_date",
 			:class=>'custom_field_show_hours', :data => {:disables => '.custom_field_show_hours input'} %>
 		<%=l(:general_text_No)%>
 	</label>
+</p>
+<p>
+  <label for="custom_field_show_shortcut">
+    <%= l(:show_shortcut) %>
+  </label>
+  <%= f.check_box :show_shortcut, label: '' %>
 </p>
 EOS

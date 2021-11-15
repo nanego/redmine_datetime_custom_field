@@ -20,3 +20,8 @@ input.ui-datepicker-trigger {
         width: auto;
     }
 }
+
+a.now_shortcut {
+    margin-top: 3px;
+    display: inline-flex;
+}

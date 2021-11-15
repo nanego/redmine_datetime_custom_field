@@ -4,7 +4,7 @@ module Redmine
   module FieldFormat
     class DateFormat < Unbounded
 
-      field_attributes :show_hours
+      field_attributes :show_hours, :show_shortcut
 
       def cast_single_value(custom_field, value, customized = nil)
         (custom_field.show_hours == '1' ? value.to_time : value.to_date) rescue nil
@@ -19,14 +19,19 @@ module Redmine
       end
 
       def edit_tag(view, tag_id, tag_name, custom_value, options = {})
-        view.text_field_tag(tag_name, custom_value.value, options.merge(:id => tag_id, :size => 15)) +
-            view.calendar_for(tag_id, custom_value.custom_field.show_hours == '1')
+        edit_tag = view.text_field_tag(tag_name, custom_value.value, options.merge(:id => tag_id, :size => 15)) +
+          view.calendar_for(tag_id, custom_value.custom_field.show_hours == '1')
+        edit_tag += view.link_to('maintenant', '#',
+                                 onclick: "nowShortcut(this.dataset.cfId, " + custom_value.custom_field.show_hours + "); return false",
+                                 data: { cf_id: custom_value.custom_field.id },
+                                 class: "now_shortcut") if custom_value.custom_field.show_shortcut == '1'
+        edit_tag
       end
 
       def bulk_edit_tag(view, tag_id, tag_name, custom_field, objects, value, options = {})
         view.text_field_tag(tag_name, value, options.merge(:id => tag_id, :size => 15)) +
-            view.calendar_for(tag_id, custom_field.show_hours == '1') +
-            bulk_clear_tag(view, tag_id, tag_name, custom_field, value)
+          view.calendar_for(tag_id, custom_field.show_hours == '1') +
+          bulk_clear_tag(view, tag_id, tag_name, custom_field, value)
       end
 
       if !Rails.env.test?
