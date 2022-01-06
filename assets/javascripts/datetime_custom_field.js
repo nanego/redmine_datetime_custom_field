@@ -116,8 +116,11 @@ function beforeShowDatePicker(input, inst) {
 }
 
 function nowShortcut(cf_id, show_hours) {
-  var now = new Date();
-  var now_str = now.getDate() + "/" + (now.getMonth()+1) + "/" + now.getFullYear();
+  var now = new Date()
+  year  = now.getFullYear()
+  month = (now.getMonth() + 1).toString().padStart(2, "0")
+  day   = now.getDate().toString().padStart(2, "0")
+  var now_str = day + "/" + month + "/" + year
   if(show_hours == '1'){now_str += " " + now.getHours() + ":" + String(now.getMinutes()).padStart(2, '0')}
-  $("input#issue_custom_field_values_"+cf_id).val(now_str);
+  $("input#issue_custom_field_values_"+cf_id).val(now_str)
 }
