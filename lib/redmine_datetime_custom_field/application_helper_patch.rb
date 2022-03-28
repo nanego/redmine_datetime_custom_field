@@ -71,6 +71,7 @@ module ApplicationHelper
         tags << javascript_tag(
             "jQuery.datetimepicker.setLocale('#{jquery_locale}');" +
                 "var datetimepickerOptions={format: 'd/m/Y', dayOfWeekStart: #{start_of_week}," +
+                "scrollInput:false," +
                 "closeOnDateSelect:true," +
                 "id:'datetimepicker'," +
                 "onShow: function( currentDateTime ){" +
