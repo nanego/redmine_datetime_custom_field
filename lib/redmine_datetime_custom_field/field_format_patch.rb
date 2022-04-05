@@ -21,7 +21,7 @@ module Redmine
       def edit_tag(view, tag_id, tag_name, custom_value, options = {})
         edit_tag = view.text_field_tag(tag_name, custom_value.value, options.merge(:id => tag_id, :size => 15)) +
           view.calendar_for(tag_id, custom_value.custom_field.show_hours == '1')
-        edit_tag += view.link_to('maintenant', '#',
+        edit_tag += view.link_to(::I18n.t(:now_label), '#',
                                  onclick: "nowShortcut(this.dataset.cfId, " + custom_value.custom_field.show_hours + "); return false",
                                  data: { cf_id: custom_value.custom_field.id },
                                  class: "now_shortcut") if custom_value.custom_field.show_shortcut == '1'

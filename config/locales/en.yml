@@ -1,3 +1,4 @@
 # English strings go here for Rails i18n
 en:
   show_shortcut: "Display Now shortcut"
+  now_label: "Now"
