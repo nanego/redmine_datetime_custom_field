@@ -8,6 +8,7 @@ module PluginDatetimeCustomField
   module ApplicationHelper
     def format_object(object, html=true, &block)
       if (object.class.name=='CustomValue' || object.class.name== 'CustomFieldValue') && object.custom_field
+        return "" unless object.customized&.visible?
         f = object.custom_field.format.formatted_custom_value(self, object, html)
         if f.nil? || f.is_a?(String)
           f
