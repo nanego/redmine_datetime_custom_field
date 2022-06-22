@@ -3,7 +3,15 @@ require 'redmine_datetime_custom_field/application_helper_patch'
 
 describe ApplicationHelper, type: :helper do
 
-  fixtures :issues, :custom_fields, :custom_values, :users
+  fixtures :projects, :enabled_modules, :users, :user_preferences, :members,
+           :member_roles, :roles, :trackers, :issue_statuses,
+           :issue_categories, :enumerations, :issues,
+           :watchers, :custom_fields, :custom_values, :versions,
+           :queries,
+           :projects_trackers,
+           :custom_fields_trackers,
+           :workflows, :journals,
+           :attachments, :time_entries
 
   before do
     User.current = User.find(1)
