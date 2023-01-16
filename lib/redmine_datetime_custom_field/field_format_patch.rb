@@ -36,7 +36,11 @@ module Redmine
 
       if !Rails.env.test?
         def order_statement(custom_field)
-          Arel.sql "to_timestamp(#{join_alias custom_field}.value, 'DD/MM/YYYY HH24:MI')"
+          if self.class.connection.adapter_name.downcase.to_sym == :postgresql
+            Arel.sql "to_timestamp(#{join_alias custom_field}.value, 'DD/MM/YYYY HH24:MI')"
+          else
+            Arel.sql "STR_TO_DATE(#{join_alias custom_field}.value, '%d/%m/%Y %H:%i')"
+          end
         end
       end
 
