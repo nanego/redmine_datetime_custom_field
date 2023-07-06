@@ -4,8 +4,8 @@ unless Rails.env.test?
   Date::DATE_FORMATS[:default] = '%d/%m/%Y'
 end
 
-module PluginDatetimeCustomField
-  module ApplicationHelper
+module RedmineDatetimeCustomField
+  module ApplicationHelperPatch
     def format_object(object, html=true, &block)
       if (object.class.name=='CustomValue' || object.class.name== 'CustomFieldValue') && object.custom_field
         return "" unless object.customized&.visible?
@@ -25,7 +25,7 @@ module PluginDatetimeCustomField
     end
   end
 end
-ApplicationHelper.prepend PluginDatetimeCustomField::ApplicationHelper
+ApplicationHelper.prepend RedmineDatetimeCustomField::ApplicationHelperPatch
 ActionView::Base.prepend ApplicationHelper
 
 module ApplicationHelper
