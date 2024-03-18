@@ -17,11 +17,11 @@ describe ApplicationHelper, type: :helper do
     User.current = User.find(1)
     issue = Issue.first
     datetime_custom_field = CustomField.where(name: "cf-test",
-                                                    type: "IssueCustomField",
-                                                    field_format: "date").first_or_create(show_hours: true)
+                                              type: "IssueCustomField",
+                                              field_format: "date").first_or_create(show_hours: true)
     @datetime_custom_value = CustomValue.where(customized_type: "Issue",
-                                                    customized_id: issue.id,
-                                                    custom_field_id: datetime_custom_field.id).first_or_create(value: '28/03/2018 18:00')
+                                               customized_id: issue.id,
+                                               custom_field_id: datetime_custom_field.id).first_or_create(value: '28/03/2018 18:00')
   end
 
   describe 'format_object' do
