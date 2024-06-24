@@ -6,14 +6,14 @@ end
 
 module RedmineDatetimeCustomField
   module ApplicationHelperPatch
-    def format_object(object, html=true, &block)
-      if (object.class.name=='CustomValue' || object.class.name== 'CustomFieldValue') && object.custom_field
+    def format_object(object, html = true, &block)
+      if (object.class.name == 'CustomValue' || object.class.name == 'CustomFieldValue') && object.custom_field
         return "" unless object.customized&.visible?
         f = object.custom_field.format.formatted_custom_value(self, object, html)
         if f.nil? || f.is_a?(String)
           f
         else
-          if f.class.name=='Time'
+          if f.class.name == 'Time'
             format_time_without_zone(f)
           else
             super
@@ -24,7 +24,7 @@ module RedmineDatetimeCustomField
       end
     end
 
-    def calendar_for(field_id, showHours=nil)
+    def calendar_for(field_id, showHours = nil)
       include_calendar_headers_tags
       javascript_tag("$(function() {" +
                        (showHours ? "datetimepickerOptions.timepicker=true; datetimepickerOptions.format='d/m/Y H:i';" : "datetimepickerOptions.timepicker=false;datetimepickerOptions.format='d/m/Y';") +
@@ -83,7 +83,6 @@ module RedmineDatetimeCustomField
       return nil unless time
       options = {}
       options[:format] = (Setting.time_format.blank? ? :time : Setting.time_format)
-      options[:locale] = User.current.language unless User.current.language.blank?
       time = time.to_time if time.is_a?(String)
       (include_date ? "#{format_date(time)} " : "") + ::I18n.l(time, **options)
     end
