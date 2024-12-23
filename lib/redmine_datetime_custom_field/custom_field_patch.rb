@@ -5,7 +5,6 @@ module RedmineDatetimeCustomField
     def self.included(base)
       base.send(:include, InstanceMethods)
       base.class_eval do
-        unloadable
         safe_attributes 'show_hours', 'show_shortcut'
       end
     end

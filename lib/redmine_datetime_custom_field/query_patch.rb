@@ -4,7 +4,7 @@ require_dependency 'issue_query'
 module RedmineDatetimeCustomField::QueryPatch
 end
 
-class Query < ActiveRecord::Base
+class Query < ApplicationRecord
 
   def validate_query_filters
     filters.each_key do |field|

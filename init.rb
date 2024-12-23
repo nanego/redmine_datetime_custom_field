@@ -13,3 +13,10 @@ end
 
 # Custom patches
 require_relative 'lib/redmine_datetime_custom_field/hooks'
+
+# Support for Redmine 5
+if Redmine::VERSION::MAJOR < 6
+  class ApplicationRecord < ActiveRecord::Base
+    self.abstract_class = true
+  end
+end
