@@ -19,4 +19,14 @@ if Redmine::VERSION::MAJOR < 6
   class ApplicationRecord < ActiveRecord::Base
     self.abstract_class = true
   end
+
+  module ActiveRecordDefaultTimezonePatch
+    def default_timezone
+      ActiveRecord::Base.default_timezone
+    end
+    def default_timezone=(value)
+      ActiveRecord::Base.default_timezone = value
+    end
+  end
+  ActiveRecord.extend(ActiveRecordDefaultTimezonePatch)
 end
