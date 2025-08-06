@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require 'spec_helper'
 require_relative '../../lib/redmine_datetime_custom_field/application_helper_patch'
 
 describe ApplicationHelper, type: :helper do

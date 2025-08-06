@@ -12,8 +12,8 @@ Note that this plugin has a dependency. You have to install this other plugin:
 
 |Plugin branch| Redmine Version | Test Status       |
 |-------------|-----------------|-------------------|
-|master       | 6.0.2           | [![6.0.2][1]][5]  |
-|master       | 5.1.5           | [![5.1.5][2]][5]  |
+|master       | 6.0.6           | [![6.0.6][1]][5]  |
+|master       | 5.1.9           | [![5.1.9][2]][5]  |
 |master       | master          | [![master][4]][5] |
 
 [1]: https://github.com/nanego/redmine_datetime_custom_field/actions/workflows/6_0_2.yml/badge.svg

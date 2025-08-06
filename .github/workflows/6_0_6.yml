@@ -1,8 +1,8 @@
-name: Tests 5.1.5
+name: Tests 6.0.6
 
 env:
   PLUGIN_NAME: redmine_datetime_custom_field
-  REDMINE_VERSION: 5.1.5
+  REDMINE_VERSION: 6.0.6
   RAILS_ENV: test
 
 on:
@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        ruby: ['3.2']
+        ruby: ['3.3']
         db: ['postgres']
       fail-fast: false
 

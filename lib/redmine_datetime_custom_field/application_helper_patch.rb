@@ -6,10 +6,29 @@ end
 
 module RedmineDatetimeCustomField
   module ApplicationHelperPatch
-    def format_object(object, html = true, &block)
-      if (object.class.name == 'CustomValue' || object.class.name == 'CustomFieldValue') && object.custom_field
+    def format_object(object, *args, &block)
+
+      if (object.is_a?(CustomValue) || object.is_a?(CustomFieldValue)) && object.custom_field.present?
         return "" unless object.customized&.visible?
-        f = object.custom_field.format.formatted_custom_value(self, object, html)
+
+        options =
+          if args.first.is_a?(Hash)
+            args.first
+          elsif !args.empty?
+            # Support the old syntax `format_object(object, html_flag)`
+            # TODO: Display a deprecation warning in a future version, then remove this
+            {:html => args.first}
+          else
+            {}
+          end
+        html = options.fetch(:html, true)
+
+        if self.respond_to?(:simple_format)
+          f = object.custom_field.format.formatted_custom_value(self, object, html: html)
+        else
+          return super
+        end
+
         if f.nil? || f.is_a?(String)
           f
         else
