@@ -1,8 +1,8 @@
-name: Tests master
+name: Tests 6.1.0
 
 env:
   PLUGIN_NAME: redmine_datetime_custom_field
-  REDMINE_VERSION: master
+  REDMINE_VERSION: 6.1.0
   RAILS_ENV: test
 
 on:
@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        ruby: ['3.4']
+        ruby: [ '3.4' ]
         db: ['postgres']
       fail-fast: false
 
@@ -89,6 +89,7 @@ jobs:
       - name: Prepare Redmine source
         working-directory: redmine
         run: |
+          rm -f test/integration/routing/plugins_test.rb # Fix routing tests # TODO Remove this line when https://www.redmine.org/issues/38707 is fixed
           sed -i '/rubocop/d' Gemfile
           rm -f .rubocop*
           cp plugins/redmine_base_rspec/spec/support/database-${{ matrix.db }}.yml config/database.yml
