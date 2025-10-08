@@ -16,8 +16,8 @@ jobs:
 
     strategy:
       matrix:
-        ruby: ['3.4']
-        db: ['postgres']
+        ruby: [ '3.4' ]
+        db: [ 'postgres' ]
       fail-fast: false
 
     services:
