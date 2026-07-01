@@ -14,6 +14,13 @@ class Query
           add_filter_error(field, :invalid) if values_for(field).detect { |v| v.present? && !/\A[+-]?\d+(,[+-]?\d+)*\z/.match?(v) }
         when :float
           add_filter_error(field, :invalid) if values_for(field).detect { |v| v.present? && !/\A[+-]?\d+(\.\d*)?\z/.match?(v) }
+        when :hour
+          case operator_for(field)
+          when "><"
+            add_filter_error(field, :invalid) unless values_for(field).all? { |v| v.present? && !v.to_s.to_hours.nil? }
+          when "=", ">=", "<="
+            add_filter_error(field, :invalid) if values_for(field).detect { |v| v.present? && v.to_s.to_hours.nil? }
+          end
         when :date, :date_past
           case operator_for(field)
           when "=", ">=", "<=", "><"
