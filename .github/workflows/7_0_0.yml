@@ -1,8 +1,8 @@
-name: Tests 6.0.10
+name: Tests 7.0.0
 
 env:
   PLUGIN_NAME: redmine_datetime_custom_field
-  REDMINE_VERSION: 6.0.10
+  REDMINE_VERSION: 7.0.0
   RAILS_ENV: test
 
 on:
@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        ruby: [ '3.3' ]
+        ruby: [ '4.0' ]
         db: [ 'postgres' ]
       fail-fast: false
 
@@ -77,9 +77,6 @@ jobs:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
 
-      - name: Setup Bundler
-        run: gem install bundler -v '~> 1.0'
-
       - name: Checkout dependencies - Base RSpec plugin
         uses: actions/checkout@v4
         with:
@@ -89,15 +86,16 @@ jobs:
       - name: Prepare Redmine source
         working-directory: redmine
         run: |
-          sed -i '/rubocop/d' Gemfile
           rm -f test/integration/routing/plugins_test.rb # Fix routing tests # TODO Remove this line when https://www.redmine.org/issues/38707 is fixed
+          sed -i '/rubocop/d' Gemfile
           rm -f .rubocop*
           cp plugins/redmine_base_rspec/spec/support/database-${{ matrix.db }}.yml config/database.yml
 
       - name: Install Ruby dependencies
         working-directory: redmine
         run: |
-          bundle install --jobs=4 --retry=3 --without development
+          bundle config set --local without 'development'
+          bundle install --jobs=4 --retry=3
 
       - name: Generate session store secret
         env:
@@ -130,7 +128,8 @@ jobs:
           RAILS_ENV: test
         working-directory: redmine
         run: |
-          bundle install --jobs=4 --retry=3 --without development
+          bundle config set --local without 'development'
+          bundle install --jobs=4 --retry=3
           bundle exec rake redmine:plugins:migrate
           # cp -i plugins/*/spec/fixtures/*yml test/fixtures/
           bundle exec rails db:fixtures:load
