@@ -9,7 +9,7 @@ describe "Checksums" do
 
   it "checks core file application_helper checksums" do
     # several methods are overridden and should be reviewed if the checksum change
-    # 6.1.5, 7.0.2 and master rb770f1439 are OK
-    assert_checksum %w"49a2316ce7e1310335388d731ab8a008 d9252db2e373b3c325933003743b80a1 ae16da4453f8ac77582c28b26640e227", "app/helpers/application_helper.rb"
+    # 6.1.6, 7.0.3 and master are OK
+    assert_checksum %w"49a2316ce7e1310335388d731ab8a008 28f40e792209fc4371e676ffc23af3f7 dcd6fd935039f4d0828f52fee8357641", "app/helpers/application_helper.rb"
   end
 end
